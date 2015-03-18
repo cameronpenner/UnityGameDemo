@@ -14,11 +14,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 _input;
     private Camera _camera;
+    private CharacterController _characterController;
 
 	// Use this for initialization
 	void Start ()
 	{
 	    _camera = GetComponent<Camera>();
+	    _characterController = GetComponent<CharacterController>();
 	}
 	
 	// Update is called once per frame
@@ -37,9 +39,11 @@ public class PlayerMovement : MonoBehaviour
 
         _motion = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0)*_motion;
 
-        transform.position = new Vector3(transform.position.x + _motion.x,
-                                         transform.position.y,
-                                         transform.position.z + _motion.z);
+        _characterController.Move(_motion);
+
+//        transform.position = new Vector3(transform.position.x + _motion.x,
+//                                         transform.position.y,
+//                                         transform.position.z + _motion.z);
     }
 
     private void OnCollisionEnter(Collision col)

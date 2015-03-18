@@ -1,21 +1,42 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerShoot : MonoBehaviour {
-    private void FixedUpdate()
-    {
-        if (Input.GetMouseButton(0))
+public class PlayerShoot : MonoBehaviour
+{
+    public int _reloadTime;
+    public Rigidbody _bullet;
+    public int _shootSpeed;
+
+    private int _reloadTimeLeft;
+    private bool _readyToShoot;
+    private Camera _camera;
+
+	// Use this for initialization
+	void Start ()
+	{
+	    _readyToShoot = true;
+	    _camera = transform.GetComponent<Camera>();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+        if (!_readyToShoot)
         {
-            var floor = GameObject.FindGameObjectWithTag("Obstacle");
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100, floor.layer))
-                Debug.DrawLine(ray.origin, hit.point);
-
-
-            Debug.Log("" + hit.point.x + ", " + hit.point.y + ", " + hit.point.z);
-            //GameObject.Instantiate();
+            _reloadTimeLeft--;
+            if (_reloadTimeLeft == 0)
+            {
+                _readyToShoot = true;
+            }
         }
-    }
+
+        if (Input.GetButton("Fire") && _readyToShoot)
+        {
+            _readyToShoot = false;
+            _reloadTimeLeft = _reloadTime;
+
+            var bullet = Instantiate(_bullet, _camera.transform.position, _camera.transform.rotation) as Rigidbody;
+            bullet.AddForce(transform.forward * _shootSpeed);
+        }
+	}
 }
