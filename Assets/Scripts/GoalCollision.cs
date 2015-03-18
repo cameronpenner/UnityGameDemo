@@ -15,10 +15,9 @@ public class GoalCollision : MonoBehaviour {
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player")
         {
             Debug.Log("found end");
-            col.gameObject.rigidbody.AddForce(new Vector3(0,5,0));
         }
     }
 }

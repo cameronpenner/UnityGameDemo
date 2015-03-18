@@ -13,14 +13,16 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _facing;
 
     private Vector3 _input;
+    private Camera _camera;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start ()
+	{
+	    _camera = GetComponent<Camera>();
 	}
 	
 	// Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         HandleMovement();
     }
@@ -28,36 +30,25 @@ public class PlayerMovement : MonoBehaviour
     private void HandleMovement()
     {
         _input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        PrevX = rigidbody.position.x;
-        PrevZ = rigidbody.position.z;
+        PrevX = transform.position.x;
+        PrevZ = transform.position.z;
 
-        if (Mathf.Abs(_motion.x) > 0)
-            _motion.x -= MoveSpeed*Mathf.Sign(_motion.x);
-        if (_motion.x < MoveSpeed)
-            _motion.x = 0;
+        _motion = new Vector3(_input.x*MaxSpeed, 0, _input.z*MaxSpeed);
 
-        if (Mathf.Abs(_motion.z) > 0)
-            _motion.z -= MoveSpeed*Mathf.Sign(_motion.z);
-        if (_motion.z < MoveSpeed)
-            _motion.z = 0;
+        _motion = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0)*_motion;
 
+        transform.position = new Vector3(transform.position.x + _motion.x,
+                                         transform.position.y,
+                                         transform.position.z + _motion.z);
+    }
 
-        _motion += _input*MoveSpeed;
-
-        _motion.x = MyMath.Clamp(_motion.x, -MaxSpeed, MaxSpeed);
-        _motion.z = MyMath.Clamp(_motion.z, -MaxSpeed, MaxSpeed);
-
-        rigidbody.position += _motion;
-
-        if (_motion.magnitude > Mathf.Epsilon)
+    private void OnCollisionEnter(Collision col)
+    {
+            Debug.Log("bump!");
+        if(col.gameObject.tag == "Obstacle")
         {
-            _facing = _motion;
-            _facing.Normalize();
+            transform.position = new Vector3(PrevX, transform.position.y, PrevZ);
         }
-
-        transform.LookAt(new Vector3(transform.position.x + _facing.x,
-                                     transform.position.y,
-                                     transform.position.z + _facing.z));
     }
 
 //    private void keyboard
