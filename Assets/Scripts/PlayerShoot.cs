@@ -35,7 +35,7 @@ public class PlayerShoot : MonoBehaviour
             _readyToShoot = false;
             _reloadTimeLeft = _reloadTime;
 
-            var bullet = Instantiate(_bullet, _camera.transform.position, _camera.transform.rotation) as Rigidbody;
+            var bullet = Instantiate(_bullet, transform.FindChild("Gun").transform.position, _camera.transform.rotation) as Rigidbody;
             bullet.AddForce(transform.forward * _shootSpeed);
         }
 	}
