@@ -18,12 +18,13 @@ public class CameraMovement : MonoBehaviour
 
 	// Use this for initialization
 	void Start ()
-    {
-    }
+	{
+	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
+	    Screen.lockCursor = true;
         if (axes == RotationAxes.MouseXAndY)
         {
             float rotationX = transform.localEulerAngles.y + Input.GetAxis("MouseX") * sensitivityX;
