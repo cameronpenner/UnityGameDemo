@@ -1,12 +1,10 @@
 ﻿using System;
-using Assets.Scripts;
 using UnityEngine;
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float MoveSpeed;
-    public float MaxSpeed;
     private Vector3 _motion;
     public float PrevX;
     public float PrevZ;
@@ -19,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	    _camera = GetComponent<Camera>();
+	    _camera = GetComponentInChildren<Camera>();
 	    _characterController = GetComponent<CharacterController>();
 	}
 	
@@ -35,30 +33,10 @@ public class PlayerMovement : MonoBehaviour
         PrevX = transform.position.x;
         PrevZ = transform.position.z;
 
-        _motion = new Vector3(_input.x*MaxSpeed, 0, _input.z*MaxSpeed);
+        _motion = new Vector3(_input.x*MoveSpeed, 0, _input.z*MoveSpeed);
 
-        _motion = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0)*_motion;
+        _motion = Quaternion.Euler(0, _camera.transform.rotation.eulerAngles.y, 0)*_motion;
 
         _characterController.Move(_motion);
-
-//        transform.position = new Vector3(transform.position.x + _motion.x,
-//                                         transform.position.y,
-//                                         transform.position.z + _motion.z);
-    }
-
-    private void OnCollisionEnter(Collision col)
-    {
-            Debug.Log("bump!");
-        if(col.gameObject.tag == "Obstacle")
-        {
-            transform.position = new Vector3(PrevX, transform.position.y, PrevZ);
-        }
-    }
-
-//    private void keyboard
-
-    public void FindGoal()
-    {
-        return;
     }
 }

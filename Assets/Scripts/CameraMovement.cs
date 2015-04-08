@@ -15,11 +15,6 @@ public class CameraMovement : MonoBehaviour
     public float maximumY = 60F;
 
     float rotationY = 0F;
-
-	// Use this for initialization
-	void Start ()
-	{
-	}
 	
 	// Update is called once per frame
 	void Update ()
