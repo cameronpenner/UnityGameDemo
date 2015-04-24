@@ -10,13 +10,11 @@ public class PlayerShoot : MonoBehaviour
     private float _reloadTimeLeft;
     private bool _readyToShoot;
 
-	// Use this for initialization
 	void Start ()
 	{
 	    _readyToShoot = true;
 	}
 	
-	// Update is called once per frame
 	void FixedUpdate ()
     {
         if (!_readyToShoot)

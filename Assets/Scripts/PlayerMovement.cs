@@ -4,24 +4,17 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float MoveSpeed;
-    private Vector3 _motion;
-    public float PrevX;
-    public float PrevZ;
-    private Vector3 _facing;
+    public float MoveSpeed = 0.1f;
 
-    private Vector3 _input;
-    private Camera _camera;
+    private Transform _cameraTransform;
     private CharacterController _characterController;
 
-	// Use this for initialization
 	void Start ()
 	{
-	    _camera = GetComponentInChildren<Camera>();
+        _cameraTransform = transform.Find("PlayerCamera");
 	    _characterController = GetComponent<CharacterController>();
 	}
 	
-	// Update is called once per frame
     private void FixedUpdate()
     {
         HandleMovement();
@@ -29,14 +22,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMovement()
     {
-        _input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        PrevX = transform.position.x;
-        PrevZ = transform.position.z;
+        var input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        _motion = new Vector3(_input.x*MoveSpeed, 0, _input.z*MoveSpeed);
+        var motion = new Vector3(input.x * MoveSpeed, 0, input.z * MoveSpeed);
+        motion = Quaternion.Euler(0, _cameraTransform.transform.rotation.eulerAngles.y, 0)*motion;
 
-        _motion = Quaternion.Euler(0, _camera.transform.rotation.eulerAngles.y, 0)*_motion;
-
-        _characterController.Move(_motion);
+        _characterController.Move(motion);
     }
 }
